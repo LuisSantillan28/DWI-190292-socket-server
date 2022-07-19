@@ -1,10 +1,12 @@
 import express from "express";
-import { SERVER_PORT } from "../global/enviroment";
+import { SERVER_PORT } from "../global/environment";
 import socketIO from "socket.io";
 import http from "http";
 import * as socket from "../sockets/sockets";
+
 export default class Server {
-  //private static _instance: Server;
+  /*private static _instance: Server;*/
+
   public app: express.Application;
   public port: number;
 
@@ -18,20 +20,25 @@ export default class Server {
     this.io = new socketIO.Server(this.httpServer, {
       cors: { origin: true, credentials: true },
     });
+
     this.escucharSockets();
   }
 
-  /*- public static get instance(){
-        return this._instance  || (this._instance = new this());
+  /*public static get instance (){
+        return this._instance || ( this._instance = new this() );
     }*/
 
   private escucharSockets() {
     this.io.on("connection", (cliente) => {
-      console.log("Cliente Conectado");
+      //Configurar Usuario
+      socket.configurarUsuario(cliente, this.io);
+      //Conectar cliente
+      socket.conectarCliente(cliente);
 
-      //mensaje
-      socket.mensaje(cliente);
-      //desconectar
+      console.log(cliente.id);
+
+      socket.mensaje(cliente, this.io);
+      //Para que se deconecte
       socket.desconectar(cliente);
     });
   }
