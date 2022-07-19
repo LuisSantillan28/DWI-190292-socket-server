@@ -28,7 +28,7 @@ export const mensaje = (cliente: Socket, io: socketIO.Server) => {
 export const configurarUsuario = (cliente: Socket, io: socketIO.Server) => {
   cliente.on(
     "configurar-usuario",
-    (payload: { nombre: String }, callback: Function) => {
+    (payload: { nombre: string }, callback: Function) => {
       usuariosConectados.actualizarNombre(cliente.id, payload.nombre);
       console.log("Bienvenido Usuario", payload.nombre);
 
