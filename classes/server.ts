@@ -18,6 +18,7 @@ export default class Server {
     this.app = express();
     this.port = SERVER_PORT;
     this.httpServer = new http.Server(this.app);
+    
     this.io = new socketIO.Server(this.httpServer, {
       cors: { origin: true, credentials: true },
     });
