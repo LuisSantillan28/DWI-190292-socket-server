@@ -1,6 +1,7 @@
 import { Router, Request, Response, response } from "express";
 import { Socket } from "socket.io";
 import Server from "../classes/server";
+import { usuariosConectados } from "../sockets/sockets";
 export const router = Router();
 
 const sockets: any = null;
@@ -49,14 +50,15 @@ router.post("/mensajes/:para", (req: Request, res: Response) => {
   });
 });
 
-//servicio para obtener todos los id de los usuarios
+//Servicio para obtener todos los id de los usuarios
 router.get("/usuarios", (req: Request, res: Response) => {
   const server = Server.instance;
 
   server.io
     .fetchSockets()
     .then((sockets) => {
-      const clients: Object[] = [];
+      //Modifiqué el Object por el arreglo de strings, Por si marca error después :(
+      const clients: string[] = [];
 
       sockets.forEach((socket) => clients.push(socket.id));
 
@@ -76,6 +78,16 @@ router.get("/usuarios", (req: Request, res: Response) => {
   //       clientes,
   //     });
   //   });
+});
+
+
+//Obtener usuarios y sus nombres
+router.get("/usuarios/detalle", (req: Request, res: Response) => {
+  res.json({
+    ok:true,
+    clientes: usuariosConectados.getLista(), 
+    
+  });
 });
 
 export default router;
