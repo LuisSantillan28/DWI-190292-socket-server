@@ -31,15 +31,19 @@ export default class Server {
   }
 
   private escucharSockets() {
+
     this.io.on("connection", (cliente) => {
       //console.log('Cliente conectado');
-      socket.conectarCliente(cliente);
-
+      //Conectar Cliente
+      socket.conectarCliente(cliente, this.io);
+      //Configurar usuario
       socket.configurarUsuario(cliente, this.io);
-
+      //Obtener usuarios activos
+      socket.obtenerUsuarios(cliente, this.io)
+      //Mensajes
       socket.mensaje(cliente, this.io);
-      //Para q se deconecte
-      socket.desconectar(cliente);
+      //Desconectar
+      socket.desconectar(cliente, this.io);
     });
   }
 
